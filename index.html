@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Neon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- MENU AWAL -->
+    <div id="menu">
+        <h1>🐍 SNAKE NEON</h1>
+        <p class="subtitle">Gunakan Arrow Keys untuk bermain</p>
+
+        <div class="section">
+            <p class="section-title">🏆 PAPAN SKOR</p>
+            <ol id="lobbyLeaderboardList"></ol>
+        </div>
+
+        <div class="section">
+            <p class="section-title">PENGATURAN</p>
+            <div class="settings-row">
+                <div>
+                    <p class="color-label">Warna Ular</p>
+                    <div class="swatch-row">
+                        <button class="color-swatch" data-color="#39ff6a" style="background:#39ff6a"></button>
+                        <button class="color-swatch" data-color="#00e5ff" style="background:#00e5ff"></button>
+                        <button class="color-swatch" data-color="#ff3860" style="background:#ff3860"></button>
+                        <button class="color-swatch" data-color="#ffd23f" style="background:#ffd23f"></button>
+                        <button class="color-swatch" data-color="#b537f2" style="background:#b537f2"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="playBtn" class="play-btn">
+            ▶ PLAY GAME
+        </button>
+    </div>
+
+    <!-- GAME -->
+    <div id="gameContainer" style="display:none;">
+
+        <button id="pauseBtn" title="Pause">⏸</button>
+
+        <h1>🐍 Snake Neon</h1>
+
+        <div class="stat-row" style="justify-content:center; gap:8px;">
+            <span>Score</span>
+            <span class="value" id="score">0</span>
+        </div>
+
+        <canvas
+            id="game"
+            width="400"
+            height="400"
+            style="margin-top:10px;">
+        </canvas>
+
+    </div>
+
+    <!-- LAYAR PAUSE -->
+    <div id="pauseScreen">
+
+        <h1>⏸ PAUSE</h1>
+        <p class="subtitle" style="margin-bottom:6px;">Game dihentikan sementara</p>
+
+        <div class="pause-actions">
+            <button id="lobbyBtn">🏠 LOBI</button>
+            <button id="resumeBtn">▶ LANJUT MAIN</button>
+        </div>
+
+    </div>
+
+    <div id="gameOverScreen">
+
+        <h1>💀 GAME OVER</h1>
+
+        <div class="stat-row">
+            <span>Score</span>
+            <span class="value" id="finalScore">0</span>
+        </div>
+
+        <div class="stat-row">
+            <span>Skor Tertinggi</span>
+            <span class="value" id="highScoreOver">0</span>
+        </div>
+
+        <div id="nameEntry" class="section">
+            <p class="color-label">🎉 SKOR MASUK TOP 5! MASUKKAN NAMA:</p>
+            <input id="nameInput" type="text" maxlength="12" placeholder="Nama kamu">
+            <button id="saveNameBtn" type="button">💾 SIMPAN</button>
+        </div>
+
+        <div class="section">
+            <p class="section-title">🏆 PAPAN SKOR</p>
+            <ol id="leaderboardList"></ol>
+        </div>
+
+        <button id="restartBtn" class="play-btn">
+            🔄 MAIN LAGI
+        </button>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="js/score.js"></script>
+    <script src="js/food.js"></script>
+    <script src="js/snake.js"></script>
+    <script src="js/color.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/pause.js"></script>
+
+</body>
+</html>
