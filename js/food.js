@@ -27,7 +27,6 @@ function createFood() {
 }
 
 function drawFood(ctx) {
-    console.log("DRAW FOOD", food);
 
     const cx = food.x + box / 2;
     const cy = food.y + box / 2;
