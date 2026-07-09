@@ -20,7 +20,7 @@ function playBeep(freq, duration, type = "square") {
 
         osc.type = type;
         osc.frequency.value = freq;
-        gain.gain.value = 0.06;
+        gain.gain.value = 1.00;
 
         osc.connect(gain);
         gain.connect(ctxA.destination);
