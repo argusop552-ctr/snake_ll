@@ -1,4 +1,5 @@
 const LEADERBOARD_KEY = "snakeLeaderboard";
+const PLAYER_NAME_KEY = "snakePlayerName";
 
 function getLeaderboard() {
     try {
@@ -15,25 +16,40 @@ function saveLeaderboardList(list) {
     } catch (e) {}
 }
 
-function qualifiesForLeaderboard(score) {
-
-    if (score <= 0) return false;
+// cek apakah nama itu udah kepake di leaderboard (nggak peduli besar/kecil huruf)
+function isNameTaken(name) {
 
     const list = getLeaderboard();
 
-    if (list.length < 5) return true;
-
-    return score > list[list.length - 1].score;
+    return list.some(
+        e => e.name.toLowerCase() === name.toLowerCase()
+    );
 }
 
 function addToLeaderboard(name, score) {
 
+    if (score <= 0) return;
+
     const list = getLeaderboard();
 
-    list.push({
-        name: (name || "Anonim").slice(0, 12),
-        score: score
-    });
+    const existingIndex = list.findIndex(
+        e => e.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (existingIndex !== -1) {
+
+        // nama udah ada -> update cuma kalau skor barunya lebih tinggi
+        if (score > list[existingIndex].score) {
+            list[existingIndex].score = score;
+        }
+
+    } else {
+
+        list.push({
+            name: (name || "Anonim").slice(0, 12),
+            score: score
+        });
+    }
 
     list.sort((a, b) => b.score - a.score);
 
@@ -68,37 +84,20 @@ function renderLeaderboards() {
     if (overList) overList.innerHTML = html;
 }
 
-// --- form input nama saat masuk top 5 ---
+// --- nama pemain: ditanya SEKALI aja lewat layar custom, disimpan permanen ---
 
-let pendingScoreForEntry = null;
-
-const nameEntry = document.getElementById("nameEntry");
-const nameInput = document.getElementById("nameInput");
-const saveNameBtn = document.getElementById("saveNameBtn");
-
-function maybeShowNameEntry(score) {
-
-    if (qualifiesForLeaderboard(score)) {
-        pendingScoreForEntry = score;
-        nameEntry.style.display = "flex";
-        nameInput.value = "";
-        nameInput.focus();
-    } else {
-        pendingScoreForEntry = null;
-        nameEntry.style.display = "none";
+function getPlayerName() {
+    try {
+        return localStorage.getItem(PLAYER_NAME_KEY);
+    } catch (e) {
+        return null;
     }
 }
 
-saveNameBtn.addEventListener("click", () => {
-
-    if (pendingScoreForEntry === null) return;
-
-    const name = nameInput.value.trim() || "Anonim";
-
-    addToLeaderboard(name, pendingScoreForEntry);
-
-    pendingScoreForEntry = null;
-    nameEntry.style.display = "none";
-});
+function setPlayerName(name) {
+    try {
+        localStorage.setItem(PLAYER_NAME_KEY, name);
+    } catch (e) {}
+}
 
 renderLeaderboards();

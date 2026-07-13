@@ -20,6 +20,12 @@ colorSwatches.forEach(btn => {
 
     btn.addEventListener("click", () => {
 
+        if (!btn.dataset.color) {
+            return;
+        }
+
+        useFriendSkin = false;
+
         snakeColor = btn.dataset.color;
         snakeColorRgb = hexToRgb(snakeColor);
 
@@ -29,6 +35,7 @@ colorSwatches.forEach(btn => {
 
         btn.classList.add("selected");
     });
+
 });
 
 // tandai warna default sebagai terpilih saat halaman dibuka
@@ -39,4 +46,19 @@ const defaultSwatch =
 
 if (defaultSwatch) {
     defaultSwatch.classList.add("selected");
+}
+
+if (friendSkinBtn) {
+
+    friendSkinBtn.addEventListener("click", () => {
+
+        useFriendSkin = true;
+
+        colorSwatches.forEach(btn =>
+            btn.classList.remove("selected")
+        );
+
+        friendSkinBtn.classList.add("selected");
+    });
+
 }

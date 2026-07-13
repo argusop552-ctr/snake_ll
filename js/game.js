@@ -15,27 +15,23 @@ let slowTimeout = null;
 
 function triggerSlowEffect() {
 
-    // kalau efek lambat sedang jalan, batalkan dulu biar tidak numpuk
     if (slowTimeout) {
         clearTimeout(slowTimeout);
     }
 
-    const baseDelay =
-        Math.max(
-            8,
-            20 - Math.floor(getScore() / 5) * 2
-        );
-
-    currentDelay = baseDelay + 15;
+    // perlambat sementara
+    currentDelay = 35;
 
     clearInterval(game);
     game = setInterval(drawGame, currentDelay);
 
     slowTimeout = setTimeout(() => {
 
-        // hanya lanjutkan kalau game masih benar-benar berjalan
         if (!isPaused && gameContainer.style.display !== "none") {
-            currentDelay = baseDelay;
+
+            // kembali ke kecepatan normal
+            currentDelay = 20;
+
             clearInterval(game);
             game = setInterval(drawGame, currentDelay);
         }
@@ -80,8 +76,8 @@ function gameOver() {
     // tampilkan skor akhir di layar game over
     finalScoreEl.textContent = getScore();
 
-    // cek apakah skor ini masuk top 5
-    maybeShowNameEntry(getScore());
+    // simpan ke leaderboard (otomatis dedup & simpan skor terbaik per nama)
+    addToLeaderboard(getPlayerName() || "Anonim", getScore());
 
     // sembunyikan area main, tampilkan layar game over
     gameContainer.style.display = "none";
@@ -177,22 +173,6 @@ function drawGame() {
 
         food = createFood();
 
-        // makin tinggi skor, makin cepat gerak ularnya
-        // (dilewati kalau sedang kena efek lambat)
-        if (!slowTimeout) {
-
-            const newDelay =
-                Math.max(
-                    8,
-                    20 - Math.floor(getScore() / 5) * 2
-                );
-
-            if (newDelay !== currentDelay) {
-                currentDelay = newDelay;
-                clearInterval(game);
-                game = setInterval(drawGame, currentDelay);
-            }
-        }
     }
 
     if (
@@ -242,8 +222,39 @@ function drawGame() {
         y: headY
     });
 
-    // --- badan: digambar sebagai garis menyambung (tube) yang
-    // mengecil & memudar ke arah ekor, biar tetap mulus walau panjang ---
+    if (useFriendSkin) {
+
+    for (let i = snake.length - 1; i >= 1; i -= 3) {
+
+        const seg = snake[i];
+
+        const t = i / snake.length;
+
+        const size =
+    Math.max(
+        16,
+        24 - (t * 14)
+    );
+
+        drawSkin(
+            ctx,
+            seg.x,
+            seg.y,
+            size
+        );
+    }
+
+    const head = snake[0];
+
+    drawSkin(
+        ctx,
+        head.x,
+        head.y,
+        25
+    );
+
+} else {
+
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
@@ -256,8 +267,6 @@ function drawGame() {
         const p0 = snake[i - 1];
         const p1 = snake[i];
 
-        // lewati sambungan yang "meloncat" jauh — ini bekas titik
-        // tembus dinding, bukan gerakan normal, jadi jangan disambung garis
         const jumpX = Math.abs(p0.x - p1.x);
         const jumpY = Math.abs(p0.y - p1.y);
 
@@ -265,7 +274,6 @@ function drawGame() {
             continue;
         }
 
-        // t: 0 di dekat kepala, mendekati 1 di dekat ekor
         const t = i / snake.length;
 
         const width =
@@ -305,45 +313,43 @@ function drawGame() {
         ctx.shadowBlur = 0;
     }
 
-    // --- kepala: digambar terakhir supaya selalu di atas badan ---
-    {
-        const head = snake[0];
+    const head = snake[0];
 
-        const x = head.x + box / 2;
-        const y = head.y + box / 2;
+    const x = head.x + box / 2;
+    const y = head.y + box / 2;
 
-        let angle = 0;
+    let angle = 0;
 
-        if (direction === "RIGHT") angle = 0;
-        if (direction === "DOWN") angle = Math.PI / 2;
-        if (direction === "LEFT") angle = Math.PI;
-        if (direction === "UP") angle = -Math.PI / 2;
+    if (direction === "RIGHT") angle = 0;
+    if (direction === "DOWN") angle = Math.PI / 2;
+    if (direction === "LEFT") angle = Math.PI;
+    if (direction === "UP") angle = -Math.PI / 2;
 
-        ctx.save();
+    ctx.save();
 
-        ctx.translate(x, y);
-        ctx.rotate(angle);
+    ctx.translate(x, y);
+    ctx.rotate(angle);
 
-        ctx.shadowBlur = 25;
-        ctx.shadowColor = snakeColor;
+    ctx.shadowBlur = 25;
+    ctx.shadowColor = snakeColor;
 
-        ctx.fillStyle = snakeColor;
+    ctx.fillStyle = snakeColor;
 
-        ctx.beginPath();
-        ctx.arc(0, 0, box / 2, 0, Math.PI * 2);
-        ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, 0, box / 2, 0, Math.PI * 2);
+    ctx.fill();
 
-        ctx.shadowBlur = 0;
+    ctx.shadowBlur = 0;
 
-        ctx.fillStyle = "black";
-        ctx.fillRect(5, -5, 3, 3);
-        ctx.fillRect(5, 5, 3, 3);
+    ctx.fillStyle = "black";
+    ctx.fillRect(5, -5, 3, 3);
+    ctx.fillRect(5, 5, 3, 3);
 
-        ctx.restore();
-    }
+    ctx.restore();
+}
 
-    snake[0] = {
-        x: headX,
-        y: headY
-    };
+snake[0] = {
+    x: headX,
+    y: headY
+};
 }

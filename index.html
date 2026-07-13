@@ -14,7 +14,7 @@
 
     <!-- MENU AWAL -->
     <div id="menu">
-        <h1>🐍 SNAKE NEON</h1>
+        <h1>SNAKE NEON HERYPEN</h1>
         <p class="subtitle">Gunakan Arrow Keys untuk bermain</p>
 
         <div class="section">
@@ -23,20 +23,20 @@
         </div>
 
         <div class="section">
-            <p class="section-title">PENGATURAN</p>
-            <div class="settings-row">
-                <div>
-                    <p class="color-label">Warna Ular</p>
-                    <div class="swatch-row">
-                        <button class="color-swatch" data-color="#39ff6a" style="background:#39ff6a"></button>
-                        <button class="color-swatch" data-color="#00e5ff" style="background:#00e5ff"></button>
-                        <button class="color-swatch" data-color="#ff3860" style="background:#ff3860"></button>
-                        <button class="color-swatch" data-color="#ffd23f" style="background:#ffd23f"></button>
-                        <button class="color-swatch" data-color="#b537f2" style="background:#b537f2"></button>
-                    </div>
-                </div>
+            <p class="section-title">SKIN ULAR HERYPEN</p>
+            <div class="swatch-row">
+                <button class="color-swatch" data-color="#39ff6a" style="background:#39ff6a"></button>
+                <button class="color-swatch" data-color="#00e5ff" style="background:#00e5ff"></button>
+                <button class="color-swatch" data-color="#ff3860" style="background:#ff3860"></button>
+                <button class="color-swatch" data-color="#ffd23f" style="background:#ffd23f"></button>
+                <button class="color-swatch" data-color="#b537f2" style="background:#b537f2"></button>
             </div>
-        </div>
+            <div class="friend-row">
+            <button id="friendSkin1" class="color-swatch friend-btn friend1"></button>
+            <button id="friendSkin2" class="color-swatch friend-btn friend2"></button>
+            <button id="friendSkin3" class="color-swatch friend-btn friend3"></button>
+            </div>
+    </div>
 
         <button id="playBtn" class="play-btn">
             ▶ PLAY GAME
@@ -48,7 +48,7 @@
 
         <button id="pauseBtn" title="Pause">⏸</button>
 
-        <h1>🐍 Snake Neon</h1>
+        <h1>Snake Neon HERYPEN</h1>
 
         <div class="stat-row" style="justify-content:center; gap:8px;">
             <span>Score</span>
@@ -84,6 +84,27 @@
 
     </div>
 
+    <!-- LAYAR BIKIN NAMA (cuma muncul sekali, pas pertama main) -->
+    <div id="nameSetupScreen">
+
+        <div class="name-icon">🐍</div>
+        <h1 style="font-size:16px;">SIAPA NAMAMU?</h1>
+        <p class="subtitle">Nama ini bakal dipakai selamanya di leaderboard</p>
+
+        <input
+            id="playerNameInput"
+            type="text"
+            maxlength="12"
+            placeholder="Ketik nama kamu...">
+
+        <p id="nameError" class="name-error"></p>
+
+        <button id="confirmNameBtn" class="play-btn" type="button">
+            ✅ MULAI MAIN
+        </button>
+
+    </div>
+
     <div id="gameOverScreen">
 
         <h1>💀 GAME OVER</h1>
@@ -96,12 +117,6 @@
         <div class="stat-row">
             <span>Skor Tertinggi</span>
             <span class="value" id="highScoreOver">0</span>
-        </div>
-
-        <div id="nameEntry" class="section">
-            <p class="color-label">🎉 SKOR MASUK TOP 5! MASUKKAN NAMA:</p>
-            <input id="nameInput" type="text" maxlength="12" placeholder="Nama kamu">
-            <button id="saveNameBtn" type="button">💾 SIMPAN</button>
         </div>
 
         <div class="section">
@@ -120,6 +135,7 @@
     <script src="js/food.js"></script>
     <script src="js/snake.js"></script>
     <script src="js/controls.js"></script>
+    <script src="js/skin.js"></script>
     <script src="js/color.js"></script>
     <script src="js/sound.js"></script>
     <script src="js/leaderboard.js"></script>
